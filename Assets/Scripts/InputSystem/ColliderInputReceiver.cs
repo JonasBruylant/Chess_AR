@@ -14,19 +14,11 @@ public class ColliderInputReceiver : InputReceiver
     List<ARRaycastHit> m_Hits = new List<ARRaycastHit>();
     ARRaycastManager RaycastManager;
 
-    Text _Touches;
-    Text _RayCastHit;
-    Text _RayCastManagerHit;
-
 
     private void Start()
     {
         GetARDependencies();
         //GetEditorDependencies();
-
-        _Touches = GameObject.Find("Touches").GetComponent<Text>();
-        _RayCastHit = GameObject.Find("RaycastManager hit").GetComponent<Text>();
-        _RayCastManagerHit = GameObject.Find("Raycast hit").GetComponent<Text>();
     }
 
     private void GetEditorDependencies()
@@ -66,11 +58,9 @@ public class ColliderInputReceiver : InputReceiver
 
     private void CheckScreenTouches()
     {
-        _Touches.text = Input.touchCount.ToString();
         if (Input.touchCount == 0)
             return;
 
-        _RayCastManagerHit.text = RaycastManager.Raycast(Input.GetTouch(0).position, m_Hits).ToString();
         //Hit results of the touch on the screen
         if (!RaycastManager.Raycast(Input.GetTouch(0).position, m_Hits))
             return;
@@ -81,7 +71,6 @@ public class ColliderInputReceiver : InputReceiver
         if (!Physics.Raycast(ray, out hit))
             return;
 
-        _RayCastHit.text = hit.transform.gameObject.name;
 
         clickPosition = hit.point;
         OnInputReceived();

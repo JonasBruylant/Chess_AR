@@ -12,7 +12,6 @@ public class Board : MonoBehaviour
     [SerializeField] private Transform bottomLeftSquareTransform;
     [SerializeField] private float squareSize;
 
-    private Text CoordsText;
     private Piece[,] grid;
     private Piece selectedPiece;
     private ChessGameController chessController;
@@ -23,8 +22,6 @@ public class Board : MonoBehaviour
         //squareSize *= transform.localScale.x;
         squareSelector = GetComponent<SquareSelectorCreator>();
         CreateGrid();
-
-        CoordsText = GameObject.Find("HitCoords").GetComponent<Text>();
     }
 
     public void SetDependencies(ChessGameController chessGameController)
@@ -48,7 +45,6 @@ public class Board : MonoBehaviour
             return;
 
         Vector2Int coords = CalculateCoordsFromPosition(inputPosition);
-        CoordsText.text = coords.ToString();
         Piece piece = GetPieceOnSquare(coords);
 
         if (selectedPiece)
