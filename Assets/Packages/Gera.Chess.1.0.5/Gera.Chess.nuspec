@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>Gera.Chess</id>
+    <version>1.0.5</version>
+    <title>Gera.Chess</title>
+    <authors>Geras1mleo</authors>
+    <license type="file">LICENSE.md</license>
+    <licenseUrl>https://aka.ms/deprecateLicenseUrl</licenseUrl>
+    <icon>knight.png</icon>
+    <readme>README_NUGET.md</readme>
+    <description>Chess logic made with C# dotnet 6 and ♥ by Geras1mleo. SAN and FEN parsing/generation, moves validation, legal positions generations, auto endgame detection (insufficient material, threefold repetition, fifty move rule), event handlers and much more!</description>
+    <releaseNotes>Endgame/Draw detection added: InsufficientMaterial rule, Threefold repetition rule and Fiftymove rule. Use AutoEndgameRules property to configure needed rules.
+Significant performance improvements, almost all methods are now x2 faster due to the use of Spans.</releaseNotes>
+    <copyright>Copyright (c) 2023 Geras1mleo</copyright>
+    <tags>chess chessboard chess-game chess-position standard-algebraic-notation chess-move forsyth-edwards-notation chess-validator chess-variations</tags>
+    <repository type="git" url="https://github.com/Geras1mleo/Chess" />
+    <dependencies>
+      <group targetFramework="net6.0">
+        <dependency id="Ardalis.SmartEnum" version="2.0.1" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>
