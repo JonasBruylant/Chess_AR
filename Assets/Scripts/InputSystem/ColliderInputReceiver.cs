@@ -2,10 +2,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
-using UnityEngine.XR.ARSubsystems;
 
 public class ColliderInputReceiver : InputReceiver
 {
+
     private Vector3 clickPosition;
     private Vector3 origin;
     private Vector3 hitpoint;
@@ -30,6 +30,7 @@ public class ColliderInputReceiver : InputReceiver
     {
         ARCamera = GameObject.Find("AR Camera").GetComponent<Camera>();
         RaycastManager = GameObject.Find("AR Session Origin").GetComponent<ARRaycastManager>();
+
     }
 
     private void Update()
@@ -58,7 +59,10 @@ public class ColliderInputReceiver : InputReceiver
 
     private void CheckScreenTouches()
     {
-        if (Input.touchCount == 0)
+
+
+        //If Raycast logic no work, this is issue :)
+        if (Input.touchCount == 0 || Input.GetTouch(0).phase != TouchPhase.Began)
             return;
 
         //Hit results of the touch on the screen

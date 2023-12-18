@@ -7,9 +7,11 @@ public class ARTouchEventBehavior : MonoBehaviour
 {
     [SerializeField] ARRaycastManager m_RaycastManager;
     [SerializeField] GameObject spawnablePrefab;
+    [SerializeField] ARPlaneManager planeManager;
 
     [HideInInspector] public bool HasSpawnedBoard = false;
     [HideInInspector] public GameObject ObjectReference;
+
 
 
     List<ARRaycastHit> m_Hits = new List<ARRaycastHit>();
@@ -89,6 +91,13 @@ public class ARTouchEventBehavior : MonoBehaviour
             ObjectReference = spawnedObject;
             ObjectReference.transform.rotation = new Quaternion(0f, 180f, 0f, 1f);
             HasSpawnedBoard = true;
+
+            //Stop detecting and spawning planes when board has been spawned
+            planeManager.requestedDetectionMode = UnityEngine.XR.ARSubsystems.PlaneDetectionMode.None;
+
+            //Hide the current planes in the scene when board has been spawned
+            planeManager.SetTrackablesActive(false);
+
         }
     }
 }
