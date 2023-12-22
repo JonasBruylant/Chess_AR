@@ -20,14 +20,26 @@ public class BoardLayout : ScriptableObject
         public TeamColor teamColor;
     }
 
-    [SerializeField]
-    public List<BoardSquareSetup> boardSquares = new List<BoardSquareSetup>();
+    [Serializable]
+    public class CorrectMove
+    {
+        BoardSquareSetup start;
+        BoardSquareSetup end;
+    }
+
+
+    [SerializeField] public List<BoardSquareSetup> boardSquares = new List<BoardSquareSetup>();
+    [SerializeField] public List<CorrectMove> correctMove = new List<CorrectMove>();
 
     public int GetPiecesCount()
     {
         return boardSquares.Count;
     }
 
+    public void ClearBoardSquares()
+    {
+        boardSquares.Clear();
+    }
     public Vector2Int GetSquareCoordsAtIndex(int index)
     {
         if (index >= boardSquares.Count)

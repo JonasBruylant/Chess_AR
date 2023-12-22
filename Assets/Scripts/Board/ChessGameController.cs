@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -14,8 +16,9 @@ public class ChessGameController : MonoBehaviour
         Finished
     };
 
-    [SerializeField] private BoardLayout startingBoardLayout;
+    [SerializeField] private List<BoardLayout> Puzzles;
     [SerializeField] private GameObject promotionCanvas;
+    private int puzzleListIndex = 0;
 
     private Board board;
     private PieceCreator pieceCreator;
@@ -24,6 +27,8 @@ public class ChessGameController : MonoBehaviour
     private ChessPlayer ActivePlayer;
     private GameState gameState;
     private Pawn pawnToPromote;
+
+
 
     public static ChessGameController Instance;
 
@@ -75,7 +80,7 @@ public class ChessGameController : MonoBehaviour
     {
         CreatePlayers();
         board.SetDependencies(this);
-        CreatePiecesFromLayout(startingBoardLayout);
+        CreatePiecesFromLayout(Puzzles[puzzleListIndex]);
 
         ActivePlayer = whitePlayer;
         GenerateAllPossiblePlayerMoves(ActivePlayer);
@@ -104,6 +109,9 @@ public class ChessGameController : MonoBehaviour
 
     private void CreatePiecesFromLayout(BoardLayout startingBoardLayout)
     {
+        if (startingBoardLayout.GetPiecesCount() > 0)
+            startingBoardLayout.ClearBoardSquares();
+
         for (int i = 0; i < startingBoardLayout.GetPiecesCount(); ++i)
         {
             Vector2Int squareCoords = startingBoardLayout.GetSquareCoordsAtIndex(i);
@@ -170,8 +178,12 @@ public class ChessGameController : MonoBehaviour
 
     private void EndGame()
     {
-        Debug.Log("Game Ended");
-        SetGameState(GameState.Finished);
+        ++puzzleListIndex;
+        SetUpBoard();
+
+
+        //Debug.Log("Game Ended");
+        //SetGameState(GameState.Finished);
     }
 
     private void ChangeActiveTeam()
