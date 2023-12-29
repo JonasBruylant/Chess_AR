@@ -1,6 +1,4 @@
-using System;
 using TMPro;
-using Unity.Tutorials.Core.Editor;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -142,11 +140,6 @@ public class PieceSelector : MonoBehaviour
 
     }
 
-    //public void GetImageFromButton(Image GOImage)
-    //{
-    //    pieceSprite = GOImage.sprite;
-    //}
-
     Vector2 PositionFromCoords(Vector2 startPosition, Vector2Int coords)
     {
         return startPosition + (new Vector2(coords.x, coords.y) * SquareSize);
@@ -174,14 +167,20 @@ public class PieceSelector : MonoBehaviour
             return;
 
         string puzzleText = tmpComp.text;
-
-        if (puzzleText.IsNullOrEmpty())
+        
+        if (puzzleText == "")
             return;
+
+
 
         for (int i = 0; i < TempImages.transform.childCount; ++i)
         {
-            Destroy(TempImages.transform.GetChild(i));
+            Destroy(TempImages.transform.GetChild(i).gameObject);
         }
+
+        if (template != null)
+            EditorUtility.SetDirty(template);
+
 
         template = ScriptableObject.CreateInstance<BoardLayout>();
         string puzzleName = puzzleText.Replace(" ", "");
@@ -190,6 +189,12 @@ public class PieceSelector : MonoBehaviour
 
         AssetDatabase.Refresh();
         EditorUtility.FocusProjectWindow();
+    }
+
+    private void OnDestroy()
+    {
+        EditorUtility.SetDirty(template);
+        AssetDatabase.SaveAssets();
     }
 
     public void ClearBoard()
