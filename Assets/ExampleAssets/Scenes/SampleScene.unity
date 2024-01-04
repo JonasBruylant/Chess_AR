@@ -1148,8 +1148,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0316c68f885fa9a4badb3d3780c625d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingBoardLayout: {fileID: 11400000, guid: f6cbe939778dfd24a850d2be1ac3e9e4,
-    type: 2}
+  BoardPuzzles:
+  - {fileID: 11400000, guid: 332b4d38dee310f4181b3e6848cbddd9, type: 2}
+  - {fileID: 11400000, guid: f29a12d8e3a7cbe4c83d76ea7563e3f2, type: 2}
+  - {fileID: 11400000, guid: 2f15aa9fbecd39b4eb1e2910b9048b36, type: 2}
+  - {fileID: 11400000, guid: d65db0a82ac605b4f84b7860504af4c7, type: 2}
+  - {fileID: 11400000, guid: 620b1b2346828df498e11cacc98471f5, type: 2}
+  - {fileID: 11400000, guid: 5bbc6ec1668cd7d46a25faa53490dae3, type: 2}
+  - {fileID: 11400000, guid: 4a4e9a7eced193e40bff2819b9a586a4, type: 2}
+  - {fileID: 11400000, guid: 10c4bd26c7f56bb47a74b2d3815a4c8b, type: 2}
+  - {fileID: 11400000, guid: 3a05c2b3475bb8442a003676cf6a556c, type: 2}
+  - {fileID: 11400000, guid: e09144c25cb1cdf4484a30c5e344aac5, type: 2}
+  - {fileID: 11400000, guid: ed810d6809951814c8c407eb5967fb1d, type: 2}
+  - {fileID: 11400000, guid: de3098af0b317624c9b3b31522d5d1f9, type: 2}
+  - {fileID: 11400000, guid: 500db52d5c2808740b5319b88c578eec, type: 2}
+  - {fileID: 11400000, guid: 723230c338aa4f847b4a7da9e43711ec, type: 2}
+  - {fileID: 11400000, guid: aa61e5898d2c8904581f2b6857b42a82, type: 2}
+  - {fileID: 11400000, guid: d87aba08894e05543af613e6ad82b720, type: 2}
+  - {fileID: 11400000, guid: 2e047026687d27448982da7de4c658f8, type: 2}
+  - {fileID: 11400000, guid: e4ba00613a43d264c9181307bbac7650, type: 2}
+  - {fileID: 11400000, guid: 6d774dd293fa5af4090f5637ef1efeea, type: 2}
+  - {fileID: 11400000, guid: ecaba032373a430409b41be36c488e6a, type: 2}
   promotionCanvas: {fileID: 260281559}
 --- !u!114 &1065697027
 MonoBehaviour:

@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
@@ -11,9 +12,10 @@ public class PieceSelector : MonoBehaviour
     [SerializeField] GameObject InstantiateObject;
     [SerializeField] Text CoordsText;
     [SerializeField] Sprite pieceSprite;
+    [SerializeField] SpriteDictionary spriteDictionary;
 
     public Text CurrentSelectedPiece;
-    BoardLayout template;
+    public BoardLayout template;
 
     PieceType pieceType;
     TeamColor teamColor;
@@ -68,8 +70,8 @@ public class PieceSelector : MonoBehaviour
     private void ClearPieceAtCoordinate()
     {
         var rectTransform = ChessBoard.GetComponent<RectTransform>();
-        float leftPosition = rectTransform.position.x - rectTransform.sizeDelta.x / 2.0f;
-        float bottomPosition = rectTransform.position.y - rectTransform.sizeDelta.y / 2.0f;
+        float leftPosition = rectTransform.position.x - rectTransform.sizeDelta.x * 0.5f;
+        float bottomPosition = rectTransform.position.y - rectTransform.sizeDelta.y * 0.5f;
         Vector2 bottomLeftPosition = new Vector2(leftPosition, bottomPosition);
 
         int x = (int)((Input.mousePosition.x - bottomLeftPosition.x) / SquareSize);
@@ -97,8 +99,8 @@ public class PieceSelector : MonoBehaviour
     void CheckGridOnMousePosition()
     {
         var rectTransform = ChessBoard.GetComponent<RectTransform>();
-        float leftPosition = rectTransform.position.x - rectTransform.sizeDelta.x / 2.0f;
-        float bottomPosition = rectTransform.position.y - rectTransform.sizeDelta.y / 2.0f;
+        float leftPosition = rectTransform.position.x - rectTransform.sizeDelta.x * 0.5f;
+        float bottomPosition = rectTransform.position.y - rectTransform.sizeDelta.y * 0.5f;
         Vector2 bottomLeftPosition = new Vector2(leftPosition, bottomPosition);
 
         float fX = ((Input.mousePosition.x - bottomLeftPosition.x) / SquareSize);
@@ -189,6 +191,48 @@ public class PieceSelector : MonoBehaviour
 
         AssetDatabase.Refresh();
         EditorUtility.FocusProjectWindow();
+    }
+
+    private void OnValidate()
+    {
+        if (template == null)
+            return;
+
+        LoadBoardLayout(template);
+    }
+
+    private void LoadBoardLayout(BoardLayout template)
+    {
+        for (int i = 0; i < TempImages.transform.childCount; ++i)
+        {
+            Destroy(TempImages.transform.GetChild(i).gameObject);
+        }
+
+        //template.boardSquares.Add(new BoardLayout.BoardSquareSetup(SelectedCoords, pieceType, teamColor));
+
+        var rectTransform = ChessBoard.GetComponent<RectTransform>();
+        float leftPosition = rectTransform.position.x - rectTransform.sizeDelta.x * 0.5f;
+        float bottomPosition = rectTransform.position.y - rectTransform.sizeDelta.y * 0.5f;
+        Vector2 bottomLeftPosition = new Vector2(leftPosition, bottomPosition);
+        int x, y;
+        
+        for (int i = 0; i < template.boardSquares.Count; ++i)
+        {
+            x = template.boardSquares[i].position.x;
+            y = template.boardSquares[i].position.y;
+
+            Vector2 canvasPosition = PositionFromCoords(bottomLeftPosition, new Vector2Int(x, y));
+            var instantiatedImage = Instantiate(InstantiateObject,
+                new Vector3(canvasPosition.x + (SquareSize * 0.5f), canvasPosition.y + (SquareSize * 0.5f), 0),
+                Quaternion.identity,
+                TempImages.transform);
+
+            string coordinateName = $"{x} {y}";
+            instantiatedImage.name = coordinateName;
+            
+            Sprite imageSprite = spriteDictionary.GetSprite(template.boardSquares[i].teamColor, template.boardSquares[i].pieceType);
+            instantiatedImage.GetComponent<Image>().sprite = imageSprite;
+        }
     }
 
     private void OnDestroy()

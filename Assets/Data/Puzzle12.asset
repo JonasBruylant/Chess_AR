@@ -31,3 +31,12 @@ MonoBehaviour:
   - position: {x: 3, y: 3}
     pieceType: 1
     teamColor: 1
+  correctMove:
+    oldPosition:
+      position: {x: 3, y: 3}
+      pieceType: 1
+      teamColor: 1
+    newPosition:
+      position: {x: 2, y: 5}
+      pieceType: 1
+      teamColor: 1

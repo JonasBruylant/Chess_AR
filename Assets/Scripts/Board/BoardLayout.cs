@@ -20,8 +20,15 @@ public class BoardLayout : ScriptableObject
         public TeamColor teamColor;
     }
 
-    [SerializeField]
-    public List<BoardSquareSetup> boardSquares = new List<BoardSquareSetup>();
+    [Serializable]
+    public class CorrectMove
+    {
+        public BoardSquareSetup oldPosition;
+        public BoardSquareSetup newPosition;
+    }
+
+    [SerializeField] public List<BoardSquareSetup> boardSquares = new List<BoardSquareSetup>();
+    [SerializeField] private CorrectMove correctMove = new CorrectMove();
 
     public int GetPiecesCount()
     {
