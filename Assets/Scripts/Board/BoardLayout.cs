@@ -23,13 +23,12 @@ public class BoardLayout : ScriptableObject
     [Serializable]
     public class CorrectMove
     {
-        BoardSquareSetup start;
-        BoardSquareSetup end;
+        public BoardSquareSetup oldPosition;
+        public BoardSquareSetup newPosition;
     }
 
-
     [SerializeField] public List<BoardSquareSetup> boardSquares = new List<BoardSquareSetup>();
-    [SerializeField] public List<CorrectMove> correctMove = new List<CorrectMove>();
+    [SerializeField] private CorrectMove correctMove = new CorrectMove();
 
     public int GetPiecesCount()
     {

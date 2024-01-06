@@ -3507,8 +3507,8 @@ RectTransform:
   - {fileID: 149825743}
   - {fileID: 1526633240}
   - {fileID: 93963863}
-  - {fileID: 1862329025}
   - {fileID: 1767221985}
+  - {fileID: 1862329025}
   - {fileID: 1958320954}
   - {fileID: 827793631}
   - {fileID: 5797241580492380394}
@@ -3538,7 +3538,9 @@ MonoBehaviour:
   InstantiateObject: {fileID: 5797241580492380393}
   CoordsText: {fileID: 1526633241}
   pieceSprite: {fileID: 0}
+  spriteDictionary: {fileID: 11400000, guid: 62af3b643578f4b4c99394669663836d, type: 2}
   CurrentSelectedPiece: {fileID: 1767221986}
+  template: {fileID: 0}
 --- !u!1001 &5797241580492380392
 PrefabInstance:
   m_ObjectHideFlags: 0

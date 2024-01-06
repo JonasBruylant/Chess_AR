@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
 
 [RequireComponent(typeof(PieceCreator))]
 public class ChessGameController : MonoBehaviour
@@ -16,9 +13,11 @@ public class ChessGameController : MonoBehaviour
         Finished
     };
 
-    [SerializeField] private List<BoardLayout> Puzzles;
+    [SerializeField] private List<BoardLayout> BoardPuzzles;
     [SerializeField] private GameObject promotionCanvas;
     private int puzzleListIndex = 0;
+
+    private int currentPuzzle = 0;
 
     private Board board;
     private PieceCreator pieceCreator;
@@ -80,7 +79,7 @@ public class ChessGameController : MonoBehaviour
     {
         CreatePlayers();
         board.SetDependencies(this);
-        CreatePiecesFromLayout(Puzzles[puzzleListIndex]);
+        CreatePiecesFromLayout(BoardPuzzles[currentPuzzle]);
 
         ActivePlayer = whitePlayer;
         GenerateAllPossiblePlayerMoves(ActivePlayer);
@@ -150,9 +149,16 @@ public class ChessGameController : MonoBehaviour
         GenerateAllPossiblePlayerMoves(GetOpponentToPlayer(ActivePlayer));
 
         if (CheckIfGameIsFinished())
-            EndGame(); //Spawn next puzzle
+            SpawnNextPuzzle(); //Spawns next puzzle
+            //EndGame(); //Spawn next puzzle
         else
             ChangeActiveTeam();
+    }
+
+    private void SpawnNextPuzzle()
+    {
+        ++currentPuzzle;
+        SetUpBoard();
     }
 
     private bool CheckIfGameIsFinished()
