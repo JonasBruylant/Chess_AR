@@ -1,6 +1,7 @@
-using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
 
 public class ARTouchEventBehavior : MonoBehaviour
@@ -8,28 +9,39 @@ public class ARTouchEventBehavior : MonoBehaviour
     [SerializeField] ARRaycastManager m_RaycastManager;
     [SerializeField] GameObject spawnablePrefab;
     [SerializeField] ARPlaneManager planeManager;
+    [SerializeField] ChessGameController gameController;
+    [SerializeField] GameObject guideTextGO;
 
     [HideInInspector] public bool HasSpawnedBoard = false;
     [HideInInspector] public GameObject ObjectReference;
-
-
+    //[HideInInspector] public Vector3 BoardPosition;
 
     List<ARRaycastHit> m_Hits = new List<ARRaycastHit>();
 
     Camera ARCamera;
     GameObject spawnedObject;
-
+    TMP_Text guideText;
+    bool hasTextUpdated = false;
 
     void Start()
     {
         spawnedObject = null;
         ARCamera = Camera.main;
+        guideText = guideTextGO.GetComponent<TMP_Text>();
     }
     // Update is called once per frame
     void Update()
     {
-        CheckScreenTouch();
-        //CheckMouseInput();
+        if (Application.isEditor)
+            CheckMouseInput();
+        else
+            CheckScreenTouch();
+
+        if(!hasTextUpdated && planeManager.trackables.count > 0)
+        {
+            guideText.text = "Tap anywhere on the surface to place the board";
+            hasTextUpdated = true;
+        }
 
     }
 
@@ -43,8 +55,12 @@ public class ARTouchEventBehavior : MonoBehaviour
             if (!Physics.Raycast(ray, out hit))
                 return;
 
-            if (hit.collider.gameObject.tag == "Table")
+            if (hit.collider.gameObject.tag == "Table" && !HasSpawnedBoard)
+            {
                 SpawnPrefab(hit.point);
+                if (ObjectReference != null)
+                    gameController.SetBoardTransform(hit.point, ObjectReference.transform.rotation);
+            }
         }
     }
 
@@ -79,7 +95,14 @@ public class ARTouchEventBehavior : MonoBehaviour
         if (hit.collider.gameObject.tag == "Spawnable")
             spawnedObject = hit.collider.gameObject;
         else
+        {
+            if (HasSpawnedBoard)
+                return;
+
             SpawnPrefab(m_Hits[0].pose.position);
+            if (ObjectReference != null)
+                gameController.SetBoardTransform(m_Hits[0].pose.position, ObjectReference.transform.rotation);
+        }
 
     }
 
@@ -91,6 +114,8 @@ public class ARTouchEventBehavior : MonoBehaviour
             ObjectReference = spawnedObject;
             ObjectReference.transform.rotation = new Quaternion(0f, 180f, 0f, 1f);
             HasSpawnedBoard = true;
+
+            guideText.text = "";
 
             //Stop detecting and spawning planes when board has been spawned
             planeManager.requestedDetectionMode = UnityEngine.XR.ARSubsystems.PlaneDetectionMode.None;

@@ -1,4 +1,4 @@
-using System;
+#if UNITY_EDITOR
 using TMPro;
 using UnityEditor;
 using UnityEngine;
@@ -110,8 +110,8 @@ public class PieceSelector : MonoBehaviour
         if (fX >= BoardSize || fX < 0 || fY >= BoardSize || fY < 0)
             return;
 
-        int x = (int)fX;
-        int y = (int)fY;
+        int x = (int)fX + 1;
+        int y = (int)fY + 1;
         
         SelectedCoords = Coordinates[x, y];
 
@@ -252,3 +252,4 @@ public class PieceSelector : MonoBehaviour
     }
 
 }
+#endif

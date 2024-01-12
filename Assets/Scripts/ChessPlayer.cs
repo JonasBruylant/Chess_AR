@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -26,6 +25,16 @@ public class ChessPlayer
     {
         if (activePieces.Contains(piece))
             activePieces.Remove(piece);
+    }
+
+    public void RemoveAllPieces()
+    {
+        for(int i = 0; i < activePieces.Count; i++)
+        {
+            if (activePieces[i] != null)
+                GameObject.Destroy(activePieces[i].gameObject);
+        }
+        activePieces.Clear();
     }
 
     public void GenerateAllPossibleMoves()

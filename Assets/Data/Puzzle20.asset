@@ -13,27 +13,27 @@ MonoBehaviour:
   m_Name: Puzzle20
   m_EditorClassIdentifier: 
   boardSquares:
-  - position: {x: 6, y: 1}
+  - position: {x: 7, y: 2}
     pieceType: 5
-    teamColor: 1
-  - position: {x: 2, y: 1}
-    pieceType: 1
     teamColor: 1
   - position: {x: 3, y: 2}
     pieceType: 1
     teamColor: 1
   - position: {x: 4, y: 3}
+    pieceType: 1
+    teamColor: 1
+  - position: {x: 5, y: 4}
     pieceType: 5
     teamColor: 0
-  - position: {x: 3, y: 0}
+  - position: {x: 4, y: 1}
     pieceType: 4
     teamColor: 1
-  correctMove:
-    oldPosition:
-      position: {x: 3, y: 0}
+  correctMoves:
+  - oldPosition:
+      position: {x: 4, y: 1}
       pieceType: 4
       teamColor: 1
     newPosition:
-      position: {x: 5, y: 2}
+      position: {x: 6, y: 3}
       pieceType: 4
       teamColor: 1

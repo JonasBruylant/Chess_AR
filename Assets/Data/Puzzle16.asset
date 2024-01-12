@@ -13,33 +13,25 @@ MonoBehaviour:
   m_Name: Puzzle16
   m_EditorClassIdentifier: 
   boardSquares:
-  - position: {x: 0, y: 5}
+  - position: {x: 1, y: 6}
     pieceType: 3
     teamColor: 1
-  - position: {x: 3, y: 4}
+  - position: {x: 4, y: 5}
     pieceType: 1
     teamColor: 1
-  - position: {x: 3, y: 3}
+  - position: {x: 4, y: 4}
     pieceType: 3
     teamColor: 0
-  - position: {x: 4, y: 3}
+  - position: {x: 5, y: 4}
     pieceType: 5
     teamColor: 0
-  - position: {x: 4, y: 2}
+  - position: {x: 5, y: 3}
     pieceType: 1
     teamColor: 1
-  - position: {x: 4, y: 1}
+  - position: {x: 5, y: 2}
     pieceType: 0
     teamColor: 1
-  - position: {x: 0, y: 0}
+  - position: {x: 1, y: 1}
     pieceType: 5
     teamColor: 1
-  correctMove:
-    oldPosition:
-      position: {x: 0, y: 5}
-      pieceType: 3
-      teamColor: 1
-    newPosition:
-      position: {x: 4, y: 5}
-      pieceType: 3
-      teamColor: 1
+  correctMoves: []

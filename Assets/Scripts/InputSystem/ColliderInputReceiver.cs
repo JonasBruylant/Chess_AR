@@ -28,15 +28,24 @@ public class ColliderInputReceiver : InputReceiver
 
     private void GetARDependencies()
     {
-        ARCamera = GameObject.Find("AR Camera").GetComponent<Camera>();
-        RaycastManager = GameObject.Find("AR Session Origin").GetComponent<ARRaycastManager>();
+        if (Application.isEditor)
+        {
+            ARCamera = Camera.main;
+        }
+        else
+        {
+            ARCamera = GameObject.Find("AR Camera").GetComponent<Camera>();
+            RaycastManager = GameObject.Find("AR Session Origin").GetComponent<ARRaycastManager>();
+        }
 
     }
 
     private void Update()
     {
-        CheckScreenTouches();
-        //CheckMouseInput();
+        if (Application.isEditor)
+            CheckMouseInput();
+        else
+            CheckScreenTouches();
 
     }
 

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 [RequireComponent(typeof(PieceCreator))]
 public class ChessGameController : MonoBehaviour
@@ -13,11 +15,18 @@ public class ChessGameController : MonoBehaviour
         Finished
     };
 
-    [SerializeField] private List<BoardLayout> BoardPuzzles;
+    [SerializeField] private PuzzleChecker BoardPuzzles;
     [SerializeField] private GameObject promotionCanvas;
-    private int puzzleListIndex = 0;
+    [SerializeField] private GameObject puzzleCanvas;
+    [SerializeField] private Text MoveText;
+    [SerializeField] private GameObject boardPrefab;
+    [SerializeField] private GameObject currentPuzzleUI;
 
     private int currentPuzzle = 0;
+    private int currentCorrectMove = 0;
+
+    private Vector3 boardPosition;
+    private Quaternion boardRotation;
 
     private Board board;
     private PieceCreator pieceCreator;
@@ -27,6 +36,10 @@ public class ChessGameController : MonoBehaviour
     private GameState gameState;
     private Pawn pawnToPromote;
 
+    private Text CurrentPuzzleText;
+    private Color Invisible = new Color(1, 1, 1, 0);
+    private Color CorrectMoveColor = new Color(0, 1, 0, 1);
+    private Color WrongMoveColor = new Color(1, 0, 0, 1);
 
 
     public static ChessGameController Instance;
@@ -36,7 +49,10 @@ public class ChessGameController : MonoBehaviour
     {
         Instance = this;
         promotionCanvas.SetActive(false);
+        puzzleCanvas.SetActive(false);
+        MoveText.color = Invisible;
         SetDependencies();
+        CurrentPuzzleText = currentPuzzleUI.GetComponent<Text>();
     }
 
     private void CreatePlayers()
@@ -58,7 +74,6 @@ public class ChessGameController : MonoBehaviour
 
     private void Update()
     {
-
         if (board == null)
         {
             GameObject[] chessboards = GameObject.FindGameObjectsWithTag("ChessBoard");
@@ -66,23 +81,27 @@ public class ChessGameController : MonoBehaviour
                 return;
 
             board = GameObject.Find("PF_ChessBoard(Clone)").GetComponent<Board>();
-            if(board != null)
+            if (board != null)
+            {
+                CurrentPuzzleText.text = (currentPuzzle + 1).ToString();
                 SetUpBoard();
+                puzzleCanvas.SetActive(true);
+            }
 
             return;
         }
-
-
     }
 
     private void SetUpBoard()
     {
         CreatePlayers();
         board.SetDependencies(this);
-        CreatePiecesFromLayout(BoardPuzzles[currentPuzzle]);
+        CreatePiecesFromLayout(BoardPuzzles.allPuzzles[currentPuzzle]);
 
         ActivePlayer = whitePlayer;
         GenerateAllPossiblePlayerMoves(ActivePlayer);
+
+        SetGameState(GameState.Play);
     }
 
     private void GenerateAllPossiblePlayerMoves(ChessPlayer activePlayer)
@@ -105,11 +124,13 @@ public class ChessGameController : MonoBehaviour
     {
         this.gameState = state;
     }
-
+    private void ClearPieces()
+    {
+        board.ClearGrid();
+    }
     private void CreatePiecesFromLayout(BoardLayout startingBoardLayout)
     {
-        if (startingBoardLayout.GetPiecesCount() > 0)
-            startingBoardLayout.ClearBoardSquares();
+        ClearPieces();
 
         for (int i = 0; i < startingBoardLayout.GetPiecesCount(); ++i)
         {
@@ -149,15 +170,95 @@ public class ChessGameController : MonoBehaviour
         GenerateAllPossiblePlayerMoves(GetOpponentToPlayer(ActivePlayer));
 
         if (CheckIfGameIsFinished())
-            SpawnNextPuzzle(); //Spawns next puzzle
-            //EndGame(); //Spawn next puzzle
+        {
+            EndGame();   
+        }
         else
-            ChangeActiveTeam();
+        {
+            var correctMoves = BoardPuzzles.allPuzzles[currentPuzzle].correctMoves;
+            if (correctMoves[currentCorrectMove].newPosition.position == board.lastMove.newPosition.position + new Vector2Int(1,1)
+                && correctMoves[currentCorrectMove].oldPosition.position == board.lastMove.oldPosition.position + new Vector2Int(1,1)
+                && correctMoves[currentCorrectMove].oldPosition.pieceType == board.lastMove.oldPosition.pieceType)
+            { 
+                ChangeActiveTeam();
+                //Enemy moves
+                if (correctMoves.Count > currentCorrectMove + 1)
+                {
+                    board.ComputerMove(correctMoves[currentCorrectMove + 1]);
+                    ++currentCorrectMove;
+
+                    ChangeActiveTeam();
+                }
+                else
+                {
+                    EndGame();
+                }
+            }
+            else
+            {
+                WrongMove();
+            }
+        }
     }
 
-    private void SpawnNextPuzzle()
+    private void WrongMove()
     {
+        MoveText.text = "Wrong move!";
+        MoveText.color = WrongMoveColor;
+        SetGameState(GameState.Finished);
+    }
+    
+    public void SpawnNextPuzzle()
+    {
+        SetGameState(GameState.Init);
+        board.DeselectPiece();
         ++currentPuzzle;
+
+        if (currentPuzzle == BoardPuzzles.allPuzzles.Count)
+        {
+            currentPuzzle = BoardPuzzles.allPuzzles.Count - 1;
+            SetGameState(GameState.Play);
+            return;
+        }
+        int puzzleUIDisplay = currentPuzzle + 1;
+        CurrentPuzzleText.text = puzzleUIDisplay.ToString();
+        MoveText.color = Invisible;
+        currentCorrectMove = 0;
+
+        Destroy(board.gameObject);
+
+        board = Instantiate(boardPrefab, boardPosition, boardRotation).GetComponent<Board>();
+
+        whitePlayer.RemoveAllPieces();
+        blackPlayer.RemoveAllPieces();
+        //board.transform.LookAt(Camera.main.transform);
+        SetUpBoard();
+    }
+
+    public void SpawnPreviousPuzzle()
+    {
+        SetGameState(GameState.Init);
+        board.DeselectPiece();
+        --currentPuzzle;
+
+        if (currentPuzzle == -1)
+        {
+            currentPuzzle = 0;
+            SetGameState(GameState.Play);
+            return;
+        }
+
+        int puzzleUIDisplay = currentPuzzle + 1;
+        CurrentPuzzleText.text = puzzleUIDisplay.ToString();
+        MoveText.color = Invisible;
+        currentCorrectMove = 0;
+
+        Destroy(board.gameObject);
+        board = Instantiate(boardPrefab, boardPosition, boardRotation).GetComponent<Board>();
+
+        whitePlayer.RemoveAllPieces();
+        blackPlayer.RemoveAllPieces();
+        //board.transform.LookAt(Camera.main.transform);
         SetUpBoard();
     }
 
@@ -165,7 +266,7 @@ public class ChessGameController : MonoBehaviour
     {
         Piece[] kingAttackingPieces = ActivePlayer.GetPiecesAttackingOppositePieceOfType<King>();
 
-        if(kingAttackingPieces.Length > 0)
+        if (kingAttackingPieces.Length > 0)
         {
             ChessPlayer oppositePlayer = GetOpponentToPlayer(ActivePlayer);
             Piece attackedKing = oppositePlayer.GetPiecesOfType<King>().FirstOrDefault();
@@ -184,12 +285,9 @@ public class ChessGameController : MonoBehaviour
 
     private void EndGame()
     {
-        ++puzzleListIndex;
-        SetUpBoard();
-
-
-        //Debug.Log("Game Ended");
-        //SetGameState(GameState.Finished);
+        MoveText.text = "Correct move!";
+        MoveText.color = CorrectMoveColor;
+        SetGameState(GameState.Finished);
     }
 
     private void ChangeActiveTeam()
@@ -204,7 +302,7 @@ public class ChessGameController : MonoBehaviour
 
     public void RemoveMovesEnablingAttackOnPieceOfType<T>(Piece piece) where T : Piece
     {
-        ActivePlayer.RemoveMovesEnablingAttackOnPiece<T>(GetOpponentToPlayer(ActivePlayer),piece);
+        ActivePlayer.RemoveMovesEnablingAttackOnPiece<T>(GetOpponentToPlayer(ActivePlayer), piece);
     }
 
     public void OnPieceRemoved(Piece piece)
@@ -226,5 +324,12 @@ public class ChessGameController : MonoBehaviour
         board.PromotePiece(pawnToPromote, (PieceType)pieceType);
 
         promotionCanvas.SetActive(false);
+    }
+
+    public void SetBoardTransform(Vector3 position, Quaternion rotation)
+    {
+        boardPosition = position;
+        boardRotation = rotation;
+
     }
 }

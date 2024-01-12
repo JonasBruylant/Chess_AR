@@ -28,7 +28,7 @@ public class BoardLayout : ScriptableObject
     }
 
     [SerializeField] public List<BoardSquareSetup> boardSquares = new List<BoardSquareSetup>();
-    [SerializeField] private CorrectMove correctMove = new CorrectMove();
+    [SerializeField] public List<CorrectMove> correctMoves = new List<CorrectMove>();
 
     public int GetPiecesCount()
     {
@@ -72,4 +72,18 @@ public class BoardLayout : ScriptableObject
         return boardSquares[index].teamColor;
     }
 
+    [ContextMenu("Add One")]
+    public void AddOneToPos()
+    {
+        foreach (var square in boardSquares)
+        {
+            square.position += new Vector2Int(1, 1);
+        }
+
+        foreach (var correctMove in correctMoves)
+        {
+            correctMove.oldPosition.position += new Vector2Int(1, 1);
+            correctMove.newPosition.position += new Vector2Int(1, 1);
+        }
+    }
 }

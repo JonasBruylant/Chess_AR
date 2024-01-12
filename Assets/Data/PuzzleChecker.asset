@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c1f6ee1468a7074daee07fa5c8eabf8, type: 3}
+  m_Name: PuzzleChecker
+  m_EditorClassIdentifier: 
+  allPuzzles:
+  - {fileID: 11400000, guid: b74b2a99b8bcc4c40b70354e7b1bc2d8, type: 2}
+  - {fileID: 11400000, guid: f29a12d8e3a7cbe4c83d76ea7563e3f2, type: 2}
+  - {fileID: 11400000, guid: 620b1b2346828df498e11cacc98471f5, type: 2}
+  - {fileID: 11400000, guid: ecaba032373a430409b41be36c488e6a, type: 2}
+  - {fileID: 11400000, guid: 6d774dd293fa5af4090f5637ef1efeea, type: 2}

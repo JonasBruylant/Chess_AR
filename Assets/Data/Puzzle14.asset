@@ -13,24 +13,16 @@ MonoBehaviour:
   m_Name: Puzzle14
   m_EditorClassIdentifier: 
   boardSquares:
-  - position: {x: 5, y: 5}
+  - position: {x: 6, y: 6}
     pieceType: 5
     teamColor: 1
-  - position: {x: 6, y: 5}
+  - position: {x: 7, y: 6}
     pieceType: 2
     teamColor: 1
-  - position: {x: 0, y: 0}
+  - position: {x: 1, y: 1}
     pieceType: 2
     teamColor: 1
-  - position: {x: 7, y: 7}
+  - position: {x: 8, y: 8}
     pieceType: 5
     teamColor: 0
-  correctMove:
-    oldPosition:
-      position: {x: 5, y: 5}
-      pieceType: 5
-      teamColor: 1
-    newPosition:
-      position: {x: 5, y: 6}
-      pieceType: 5
-      teamColor: 1
+  correctMoves: []

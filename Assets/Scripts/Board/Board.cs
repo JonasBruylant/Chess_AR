@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 [RequireComponent(typeof(SquareSelectorCreator))]
 public class Board : MonoBehaviour
@@ -11,7 +9,10 @@ public class Board : MonoBehaviour
 
     [SerializeField] private Transform bottomLeftSquareTransform;
     [SerializeField] private float squareSize;
+    CameraZoom cameraZoom;
 
+    public BoardLayout.CorrectMove lastMove;
+    
     private Piece[,] grid;
     private Piece selectedPiece;
     private ChessGameController chessController;
@@ -21,6 +22,9 @@ public class Board : MonoBehaviour
     {
         //squareSize *= transform.localScale.x;
         squareSelector = GetComponent<SquareSelectorCreator>();
+
+        cameraZoom = GameObject.Find("CameraZoom").GetComponent<CameraZoom>();
+        cameraZoom.SetBoardReference(this.gameObject);
         CreateGrid();
     }
 
@@ -52,17 +56,31 @@ public class Board : MonoBehaviour
             if (piece != null && selectedPiece == piece)
                 DeselectPiece();
             else if (piece != null && selectedPiece != piece && chessController.IsTeamTurnActive(piece.team))
+            {
                 SelectPiece(piece);
+                lastMove.oldPosition.position = coords;
+                lastMove.oldPosition.teamColor = selectedPiece.team;
+                lastMove.oldPosition.pieceType = GetPieceType(selectedPiece);
+            }
             else if (selectedPiece.CanMoveTo(coords))
+            {
+                lastMove.newPosition.position = coords;
+                lastMove.newPosition.teamColor = selectedPiece.team;
+                lastMove.newPosition.pieceType = GetPieceType(selectedPiece);
+
                 OnSelectedPieceMoved(coords, selectedPiece);
+            }
         }
         else
         {
             if (piece != null && chessController.IsTeamTurnActive(piece.team))
+            {
                 SelectPiece(piece);
+                lastMove.oldPosition.position = coords;
+                lastMove.oldPosition.teamColor = selectedPiece.team;
+                lastMove.oldPosition.pieceType = GetPieceType(selectedPiece);
+            }
         }
-
-
     }
 
     private void OnSelectedPieceMoved(Vector2Int coords, Piece piece)
@@ -70,6 +88,7 @@ public class Board : MonoBehaviour
         TryToTakeOppositePiece(coords);
         UpdateBoardOnPieceMove(coords, piece.occupiedSquare, piece, null);
         selectedPiece.MovePiece(coords);
+
         DeselectPiece();
 
         EndTurn();
@@ -126,7 +145,7 @@ public class Board : MonoBehaviour
         squareSelector.ShowSelection(squaresData);
     }
 
-    private void DeselectPiece()
+    public void DeselectPiece()
     {
         selectedPiece = null;
         squareSelector.ClearSelection();
@@ -205,6 +224,68 @@ public class Board : MonoBehaviour
                     chessController.CreateAndInitialize(piece.occupiedSquare, piece.team, typeof(Queen));
                     break;
                 }
+        }
+    }
+
+    PieceType GetPieceType(Piece piece)
+    {
+        Rook rook = piece as Rook;
+        if (rook != null)
+            return PieceType.Rook;
+
+        Queen queen = piece as Queen;
+        if (queen != null)
+            return PieceType.Queen;
+
+        Bishop bishop = piece as Bishop;
+        if (bishop != null)
+            return PieceType.Bishop;
+
+        Knight knight = piece as Knight;
+        if (knight != null)
+            return PieceType.Knight;
+
+        Pawn pawn = piece as Pawn;
+        if (pawn != null)
+            return PieceType.Pawn;
+
+        King king = piece as King;
+        if (king != null)
+            return PieceType.King;
+
+        return PieceType.Pawn;
+    }
+
+    public void ComputerMove(BoardLayout.CorrectMove correctMove)
+    {
+        var coords = correctMove.oldPosition.position - new Vector2Int(1, 1);
+        var newCoords = correctMove.newPosition.position - new Vector2Int(1, 1);
+
+        Piece piece = GetPieceOnSquare(coords);
+        SelectPiece(piece);
+
+        TryToTakeOppositePiece(newCoords);
+        UpdateBoardOnPieceMove(newCoords, piece.occupiedSquare, piece, null);
+        selectedPiece.MovePiece(newCoords);
+
+        DeselectPiece();
+
+
+        if (correctMove.newPosition.pieceType != correctMove.oldPosition.pieceType)
+        {
+            PromotePiece(piece as Pawn, correctMove.newPosition.pieceType);
+        }
+    }
+
+    public void ClearGrid()
+    {
+        for (int i = 0; i < BOARD_SIZE; ++i)
+        {
+            for (int j = 0; j < BOARD_SIZE; ++j)
+            {
+                if (grid[i,j] != null)
+                    chessController.OnPieceRemoved(grid[i,j]);
+            }
         }
     }
 }
