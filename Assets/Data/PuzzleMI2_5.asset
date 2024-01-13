@@ -1,0 +1,88 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 576c108e317be914e8f00ced1606c846, type: 3}
+  m_Name: PuzzleMI2_5
+  m_EditorClassIdentifier: 
+  boardSquares:
+  - position: {x: 7, y: 2}
+    pieceType: 2
+    teamColor: 1
+  - position: {x: 8, y: 1}
+    pieceType: 5
+    teamColor: 1
+  - position: {x: 7, y: 3}
+    pieceType: 4
+    teamColor: 0
+  - position: {x: 8, y: 4}
+    pieceType: 0
+    teamColor: 0
+  - position: {x: 7, y: 6}
+    pieceType: 0
+    teamColor: 0
+  - position: {x: 6, y: 7}
+    pieceType: 4
+    teamColor: 1
+  - position: {x: 4, y: 6}
+    pieceType: 2
+    teamColor: 0
+  - position: {x: 3, y: 5}
+    pieceType: 5
+    teamColor: 0
+  - position: {x: 2, y: 6}
+    pieceType: 0
+    teamColor: 0
+  - position: {x: 3, y: 4}
+    pieceType: 0
+    teamColor: 0
+  - position: {x: 1, y: 4}
+    pieceType: 0
+    teamColor: 0
+  - position: {x: 2, y: 3}
+    pieceType: 2
+    teamColor: 0
+  - position: {x: 2, y: 5}
+    pieceType: 0
+    teamColor: 1
+  - position: {x: 2, y: 2}
+    pieceType: 3
+    teamColor: 1
+  - position: {x: 4, y: 3}
+    pieceType: 0
+    teamColor: 1
+  - position: {x: 5, y: 3}
+    pieceType: 0
+    teamColor: 1
+  correctMoves:
+  - oldPosition:
+      position: {x: 6, y: 7}
+      pieceType: 4
+      teamColor: 1
+    newPosition:
+      position: {x: 3, y: 4}
+      pieceType: 4
+      teamColor: 1
+  - oldPosition:
+      position: {x: 2, y: 3}
+      pieceType: 2
+      teamColor: 0
+    newPosition:
+      position: {x: 3, y: 4}
+      pieceType: 2
+      teamColor: 0
+  - oldPosition:
+      position: {x: 4, y: 3}
+      pieceType: 0
+      teamColor: 1
+    newPosition:
+      position: {x: 4, y: 4}
+      pieceType: 0
+      teamColor: 1

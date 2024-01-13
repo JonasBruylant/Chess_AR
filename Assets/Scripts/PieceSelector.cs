@@ -90,10 +90,9 @@ public class PieceSelector : MonoBehaviour
         }
         for (int i = 0; i < template.boardSquares.Count; i++)
         {
-            if (template.boardSquares[i].position.x == x && template.boardSquares[i].position.y == y)
+            if (template.boardSquares[i].position.x == x+1 && template.boardSquares[i].position.y == y+1)
                 template.boardSquares.Remove(template.boardSquares[i]);
         }
-
     }
 
     void CheckGridOnMousePosition()
@@ -110,8 +109,8 @@ public class PieceSelector : MonoBehaviour
         if (fX >= BoardSize || fX < 0 || fY >= BoardSize || fY < 0)
             return;
 
-        int x = (int)fX + 1;
-        int y = (int)fY + 1;
+        int x = (int)fX;
+        int y = (int)fY;
         
         SelectedCoords = Coordinates[x, y];
 
@@ -134,11 +133,11 @@ public class PieceSelector : MonoBehaviour
 
         for (int i = 0; i < template.boardSquares.Count; i++)
         {
-            if (template.boardSquares[i].position.x == x && template.boardSquares[i].position.y == y)
+            if (template.boardSquares[i].position.x == x + 1 && template.boardSquares[i].position.y == y + 1)
                 template.boardSquares.Remove(template.boardSquares[i]);
         }
 
-        template.boardSquares.Add(new BoardLayout.BoardSquareSetup(SelectedCoords, pieceType, teamColor));
+        template.boardSquares.Add(new BoardLayout.BoardSquareSetup(SelectedCoords + new Vector2Int(1,1), pieceType, teamColor));
 
     }
 
@@ -218,8 +217,8 @@ public class PieceSelector : MonoBehaviour
         
         for (int i = 0; i < template.boardSquares.Count; ++i)
         {
-            x = template.boardSquares[i].position.x;
-            y = template.boardSquares[i].position.y;
+            x = template.boardSquares[i].position.x - 1;
+            y = template.boardSquares[i].position.y - 1;
 
             Vector2 canvasPosition = PositionFromCoords(bottomLeftPosition, new Vector2Int(x, y));
             var instantiatedImage = Instantiate(InstantiateObject,

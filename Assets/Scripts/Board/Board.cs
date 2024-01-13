@@ -48,6 +48,9 @@ public class Board : MonoBehaviour
         if (!chessController.IsGameInProgress())
             return;
 
+        if (chessController.IsComputerTurn)
+            return;
+
         Vector2Int coords = CalculateCoordsFromPosition(inputPosition);
         Piece piece = GetPieceOnSquare(coords);
 
@@ -270,11 +273,9 @@ public class Board : MonoBehaviour
 
         DeselectPiece();
 
-
         if (correctMove.newPosition.pieceType != correctMove.oldPosition.pieceType)
-        {
             PromotePiece(piece as Pawn, correctMove.newPosition.pieceType);
-        }
+
     }
 
     public void ClearGrid()

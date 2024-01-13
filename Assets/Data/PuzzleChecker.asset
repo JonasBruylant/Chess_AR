@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   allPuzzles:
   - {fileID: 11400000, guid: b74b2a99b8bcc4c40b70354e7b1bc2d8, type: 2}
-  - {fileID: 11400000, guid: f29a12d8e3a7cbe4c83d76ea7563e3f2, type: 2}
-  - {fileID: 11400000, guid: 620b1b2346828df498e11cacc98471f5, type: 2}
-  - {fileID: 11400000, guid: ecaba032373a430409b41be36c488e6a, type: 2}
-  - {fileID: 11400000, guid: 6d774dd293fa5af4090f5637ef1efeea, type: 2}
+  - {fileID: 11400000, guid: 45aa793f1a311b54bb33653cc6bb8a02, type: 2}
+  - {fileID: 11400000, guid: 4882a8870b8a58f4b843a53768eaf60f, type: 2}
+  - {fileID: 11400000, guid: f6733815c1e8ed540a4cbf13fb2ca619, type: 2}
+  - {fileID: 11400000, guid: 01b0ea2dddbf0864a9a42d7acadf6852, type: 2}
+  - {fileID: 11400000, guid: c8f393ae59ffbbb4182f772cc01c0960, type: 2}
+  - {fileID: 11400000, guid: d38ca0007c97e3e4081c7c153025cd0b, type: 2}

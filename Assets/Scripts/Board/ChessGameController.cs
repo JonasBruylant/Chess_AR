@@ -1,9 +1,9 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
 
 [RequireComponent(typeof(PieceCreator))]
 public class ChessGameController : MonoBehaviour
@@ -24,6 +24,8 @@ public class ChessGameController : MonoBehaviour
 
     private int currentPuzzle = 0;
     private int currentCorrectMove = 0;
+    public bool IsComputerTurn = false;
+    [SerializeField] private int ComputerTurnTime = 1;
 
     private Vector3 boardPosition;
     private Quaternion boardRotation;
@@ -90,6 +92,8 @@ public class ChessGameController : MonoBehaviour
 
             return;
         }
+
+
     }
 
     private void SetUpBoard()
@@ -171,23 +175,20 @@ public class ChessGameController : MonoBehaviour
 
         if (CheckIfGameIsFinished())
         {
-            EndGame();   
+            EndGame();
         }
         else
         {
             var correctMoves = BoardPuzzles.allPuzzles[currentPuzzle].correctMoves;
-            if (correctMoves[currentCorrectMove].newPosition.position == board.lastMove.newPosition.position + new Vector2Int(1,1)
-                && correctMoves[currentCorrectMove].oldPosition.position == board.lastMove.oldPosition.position + new Vector2Int(1,1)
+            if (correctMoves[currentCorrectMove].newPosition.position == board.lastMove.newPosition.position + new Vector2Int(1, 1)
+                && correctMoves[currentCorrectMove].oldPosition.position == board.lastMove.oldPosition.position + new Vector2Int(1, 1)
                 && correctMoves[currentCorrectMove].oldPosition.pieceType == board.lastMove.oldPosition.pieceType)
-            { 
+            {
                 ChangeActiveTeam();
                 //Enemy moves
                 if (correctMoves.Count > currentCorrectMove + 1)
                 {
-                    board.ComputerMove(correctMoves[currentCorrectMove + 1]);
-                    ++currentCorrectMove;
-
-                    ChangeActiveTeam();
+                    StartCoroutine(DoComputerMove(correctMoves));
                 }
                 else
                 {
@@ -201,6 +202,18 @@ public class ChessGameController : MonoBehaviour
         }
     }
 
+    private IEnumerator DoComputerMove(List<BoardLayout.CorrectMove> correctMoves)
+    {
+        IsComputerTurn = true;
+
+        yield return new WaitForSeconds(ComputerTurnTime);
+        board.ComputerMove(correctMoves[currentCorrectMove + 1]);
+        ++currentCorrectMove;
+
+        IsComputerTurn = false;
+        ChangeActiveTeam();
+
+    }
     private void WrongMove()
     {
         MoveText.text = "Wrong move!";
@@ -227,6 +240,23 @@ public class ChessGameController : MonoBehaviour
 
         Destroy(board.gameObject);
 
+        board = Instantiate(boardPrefab, boardPosition, boardRotation).GetComponent<Board>();
+
+        whitePlayer.RemoveAllPieces();
+        blackPlayer.RemoveAllPieces();
+        //board.transform.LookAt(Camera.main.transform);
+        SetUpBoard();
+    }
+
+    public void RedoPuzzle()
+    {
+        SetGameState(GameState.Init);
+        board.DeselectPiece();
+
+        MoveText.color = Invisible;
+        currentCorrectMove = 0;
+
+        Destroy(board.gameObject);
         board = Instantiate(boardPrefab, boardPosition, boardRotation).GetComponent<Board>();
 
         whitePlayer.RemoveAllPieces();
